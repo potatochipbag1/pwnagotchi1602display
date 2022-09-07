@@ -1,6 +1,7 @@
 # pwnagotchi1602display
 
 PLEASE VIEW THIS IN RAW              
+Last tested on 1.5.3
 
 go to /usr/local/lib/python3.7/dist-packages/pwnagotchi
 delete that voice.py and replace it with this voice.py
