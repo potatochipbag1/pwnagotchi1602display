@@ -25,12 +25,16 @@ I2CBUS = 1
 ADDRESS = 0x27
 import os
 import smbus
+import time
 from time import sleep
+import random
+time.sleep(random.randint(1,3))
+
 class i2c_device:
    def __init__(self, addr, port=I2CBUS):
       self.addr = addr
       self.bus = smbus.SMBus(port)
-
+#time.sleep(10)
 # Write a single command
    def write_cmd(self, cmd):
       self.bus.write_byte(self.addr, cmd)
@@ -57,7 +61,6 @@ class i2c_device:
 # Read a block of data
    def read_block_data(self, cmd):
       return self.bus.read_block_data(self.addr, cmd)
-
 
 # commands
 LCD_CLEARDISPLAY = 0x01
@@ -146,6 +149,7 @@ class lcd:
   
    # put string function with optional char positioning
    def lcd_display_string(self, string, line=1, pos=0):
+#    time.sleep(10)
     if line == 1:
       pos_new = pos
     elif line == 2:
@@ -183,3 +187,6 @@ class lcd:
 
 
 
+#self.lcd.state(1)
+#lcd_device.write_cmd(LCD_NOBACKLIGHT)
+#backlight(1)

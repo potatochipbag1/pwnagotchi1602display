@@ -1,13 +1,19 @@
 import random
+import time
 import gettext
 import os
 import pwnagotchi.ui.customd
 from pwnagotchi.ui.customd import *
-refresh()
+time.sleep(random.randint(3,5))
+#refresh()
 
 
 class Voice:
+    os.system("python3 /usr/local/lib/python3.7/dist-packages/pwnagotchi/ui/1602.py")
+    os.system("python3 /usr/local/lib/python3.7/dist-packages/pwnagotchi/ui/customd.py")
+    print("WOOOOOOOOOOOOOO")
     def __init__(self, lang):
+        print("H")
         localedir = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'locale')
         translation = gettext.translation(
             'voice', localedir,
@@ -20,13 +26,14 @@ class Voice:
         refresh()
         self._ = translation.gettext
 #        write(str(self._))
+
     def custom(self, s):
         return s
 
     def default(self):
         return self._('ZzzzZZzzzzZzzz')
     def on_starting(self):
-        write1('Hi, I\'m Pwnagotchi! Starting ...')
+        write1('Hi, Im Pwnagotchi! Starting...')
         return random.choice([
             self._('Hi, I\'m Pwnagotchi! Starting ...'),
             self._('New day, new hunt, new pwns!'),
@@ -138,7 +145,7 @@ class Voice:
             self._('Where\'s everybody?!')])
 
     def on_napping(self, secs):
-        write1('Sleeping...'),
+        write1('Sleeping for '+str(secs)+'s...'),
         return random.choice([
             self._('Napping for {secs}s ...').format(secs=secs),
             self._('Zzzzz'),
@@ -163,15 +170,15 @@ class Voice:
     def on_assoc(self, ap):
         ssid, bssid = ap['hostname'], ap['mac']
         what = ssid if ssid != '' and ssid != '<hidden>' else bssid
+        write1('Hey '+str(what)+', lets be friends! ')
         return random.choice([
-            write1('Hey '+str(what)+'lets be friends! '),
             self._('Hey {what} let\'s be friends!').format(what=what),
             self._('Associating to {what}').format(what=what),
             self._('Yo {what}!').format(what=what)])
 
     def on_deauth(self, sta):
+        write1('Just decided that '+sta['mac']+' needs no WiFi!')
         return random.choice([
-            write1('Just decided that this device needs no WiFi!'),
             self._('Just decided that {mac} needs no WiFi!').format(mac=sta['mac']),
             self._('Deauthenticating {mac}').format(mac=sta['mac']),
             self._('Kickbanning {mac}!').format(mac=sta['mac'])])
@@ -192,15 +199,20 @@ class Voice:
 
     def on_last_session_data(self, last_session):
         write1('Cannot get last session data...'),
+        write1('Kicked '+str(last_session.deauthed)+' stations')
         status = self._('Kicked {num} stations\n').format(num=last_session.deauthed)
         if last_session.associated > 999:
+            write1('Made >999 new friends')
             status += self._('Made >999 new friends\n')
         else:
+            write('Made '+str(last_session.associated)+' new friends')
             status += self._('Made {num} new friends\n').format(num=last_session.associated)
         status += self._('Got {num} handshakes\n').format(num=last_session.handshakes)
         if last_session.peers == 1:
+            write1('Met 1 peer')
             status += self._('Met 1 peer')
         elif last_session.peers > 0:
+            write1('Met '+str(last_session.peers)+' peers')
             status += self._('Met {num} peers').format(num=last_session.peers)
         return status
 
